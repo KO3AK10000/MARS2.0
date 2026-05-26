@@ -187,14 +187,14 @@ function renderPhoneLinks() {
   if (!phoneLinksEl) return;
 
   const baseUrl = admin.phoneBaseUrl;
-  const phoneRenderKey = `${baseUrl}|${admin.state.players.map((player) => player.name).join("|")}`;
+  const phoneRenderKey = `${baseUrl}|${admin.state.players.map((player) => `${player.id}:${player.name}`).join("|")}`;
   if (admin.renderedPhoneBaseUrl === phoneRenderKey) return;
   admin.renderedPhoneBaseUrl = phoneRenderKey;
   phoneLinksEl.innerHTML = "";
 
   admin.state.players.forEach((player, index) => {
     const name = player.name;
-    const url = `${baseUrl}/player.html?p=${index}`;
+    const url = `${baseUrl}/player.html?id=${encodeURIComponent(player.id || player.name)}`;
     const card = document.createElement("article");
     const qr = document.createElement("img");
     const button = document.createElement("button");

@@ -50,6 +50,7 @@ function triggerSound(reason, playerName = null) {
 
 function createPlayer(name, seconds) {
   return {
+    id: name,
     name,
     seconds,
     running: false,
@@ -108,6 +109,10 @@ function getIndexFromAction(action) {
     return action.index;
   }
 
+  if (typeof action.id === "string") {
+    return state.players.findIndex((player) => player.id === action.id);
+  }
+
   if (typeof action.name === "string") {
     return state.players.findIndex((player) => player.name === action.name);
   }
@@ -141,6 +146,7 @@ function applyAction(action) {
     case "selectName": {
       const index = getIndexFromAction(action);
       if (index !== -1 && playerNames.includes(action.name)) {
+        state.players[index].id = action.name;
         state.players[index].name = action.name;
       }
       break;
