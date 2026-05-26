@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Мій таймер</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="mobile-app">
+      <header class="mobile-header">
+        <p id="mobileGeneration">ПОКОЛІННЯ 1</p>
+        <h1 id="mobileName">ГРАВЕЦЬ</h1>
+      </header>
+
+      <section class="mobile-phase">
+        <article>
+          <span>ПОЧАТОК</span>
+          <strong id="mobileIntro">--:--</strong>
+        </article>
+        <article>
+          <span>ДРАФТ</span>
+          <strong id="mobileDraft">--:--</strong>
+        </article>
+      </section>
+
+      <section id="mobilePlayerCard" class="mobile-player-card">
+        <div id="mobileTimer" class="mobile-timer">00:00</div>
+        <p id="mobileStatus" class="mobile-status"></p>
+      </section>
+
+      <section class="mobile-controls">
+        <button id="mobileReadyBtn" type="button">ГОТОВ</button>
+        <button id="mobilePassBtn" type="button">ПАС</button>
+        <button id="mobileNextBtn" type="button">NEXT</button>
+      </section>
+
+      <p id="mobileMessage" class="mobile-message"></p>
+    </main>
+
+    <script src="player.js"></script>
+  </body>
+</html>

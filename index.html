@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Таймер гри</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="app">
+      <section class="setup" aria-label="Налаштування часу">
+        <label for="minutesInput">Хвилин для кожного гравця</label>
+        <input id="minutesInput" type="number" min="1" step="1" value="60">
+        <button id="setMinutesBtn" type="button">Встановити</button>
+      </section>
+
+      <section id="players" class="players" aria-label="Таймери гравців"></section>
+
+      <section class="main-controls" aria-label="Головні кнопки">
+        <button id="introBtn" class="big-control" type="button">ПОЧАТОК</button>
+        <button id="globalStopBtn" class="big-control stop" type="button">СТОП</button>
+        <button id="draftBtn" class="big-control" type="button">ДРАФТ</button>
+        <button id="nextBtn" class="big-control next" type="button">NEXT</button>
+      </section>
+
+      <p id="generation" class="generation">ПОКОЛІННЯ 1</p>
+
+      <section class="phone-panel" aria-label="Посилання для телефонів">
+        <h2>Посилання для телефонів</h2>
+        <div id="phoneLinks" class="phone-links"></div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

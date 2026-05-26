@@ -1,0 +1,16 @@
+{
+  "name": "game-timer-online",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Online synchronized game timer for host and mobile players.",
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --check server.js && node --check script.js && node --check player.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "qrcode": "^1.5.4"
+  }
+}
