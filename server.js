@@ -19,19 +19,13 @@ const contentTypes = {
 
 const state = {
   defaultSeconds: 60 * 60,
+  playerCount: 5,
   activeIndex: -1,
   generation: 1,
   introCountdown: null,
   draftCountdown: null,
   sound: null,
-  players: playerNames.map((name) => ({
-    name,
-    seconds: 60 * 60,
-    running: false,
-    ready: false,
-    passed: false,
-    warnedBelowTen: false
-  }))
+  players: playerNames.map((name) => createPlayer(name, 60 * 60))
 };
 
 const clients = new Set();
@@ -52,6 +46,27 @@ function broadcast() {
 function triggerSound(reason, playerName = null) {
   soundId += 1;
   state.sound = { id: soundId, reason, playerName };
+}
+
+function createPlayer(name, seconds) {
+  return {
+    name,
+    seconds,
+    running: false,
+    ready: false,
+    passed: false,
+    warnedBelowTen: false
+  };
+}
+
+function resetPlayersForCount(count) {
+  const safeCount = Math.min(5, Math.max(1, count));
+  state.playerCount = safeCount;
+  state.activeIndex = -1;
+  state.generation = 1;
+  cancelCountdown("intro");
+  cancelCountdown("draft");
+  state.players = playerNames.slice(0, safeCount).map((name) => createPlayer(name, state.defaultSeconds));
 }
 
 function stopAllPlayers() {
@@ -113,6 +128,13 @@ function applyAction(action) {
         player.running = false;
         player.warnedBelowTen = state.defaultSeconds < 10 * 60;
       });
+      break;
+    }
+
+    case "setPlayerCount": {
+      const count = Number.parseInt(action.count, 10);
+      if (!Number.isFinite(count)) return;
+      resetPlayersForCount(count);
       break;
     }
 

@@ -9,6 +9,7 @@ const playerColors = {
 
 const playersEl = document.querySelector("#players");
 const minutesInput = document.querySelector("#minutesInput");
+const playerCountSelect = document.querySelector("#playerCountSelect");
 const setMinutesBtn = document.querySelector("#setMinutesBtn");
 const introBtn = document.querySelector("#introBtn");
 const draftBtn = document.querySelector("#draftBtn");
@@ -134,6 +135,9 @@ function render() {
   if (document.activeElement !== minutesInput) {
     minutesInput.value = Math.round(admin.state.defaultSeconds / 60);
   }
+  if (playerCountSelect && document.activeElement !== playerCountSelect) {
+    playerCountSelect.value = String(admin.state.playerCount || admin.state.players.length);
+  }
   generationEl.textContent = `ПОКОЛІННЯ ${admin.state.generation}`;
   renderCountdownButtons();
   renderPlayers();
@@ -183,11 +187,13 @@ function renderPhoneLinks() {
   if (!phoneLinksEl) return;
 
   const baseUrl = admin.phoneBaseUrl;
-  if (admin.renderedPhoneBaseUrl === baseUrl) return;
-  admin.renderedPhoneBaseUrl = baseUrl;
+  const phoneRenderKey = `${baseUrl}|${admin.state.players.map((player) => player.name).join("|")}`;
+  if (admin.renderedPhoneBaseUrl === phoneRenderKey) return;
+  admin.renderedPhoneBaseUrl = phoneRenderKey;
   phoneLinksEl.innerHTML = "";
 
-  playerNames.forEach((name, index) => {
+  admin.state.players.forEach((player, index) => {
+    const name = player.name;
     const url = `${baseUrl}/player.html?p=${index}`;
     const card = document.createElement("article");
     const qr = document.createElement("img");
@@ -268,6 +274,13 @@ setMinutesBtn.addEventListener("click", () => {
   const minutes = Number.parseInt(minutesInput.value, 10);
   sendAction("setDefaultMinutes", { minutes });
 });
+if (playerCountSelect) {
+  playerCountSelect.addEventListener("change", () => {
+    sendAction("setPlayerCount", { count: Number.parseInt(playerCountSelect.value, 10) });
+    admin.visibleQrIndex = -1;
+    admin.renderedPhoneBaseUrl = "";
+  });
+}
 introBtn.addEventListener("click", () => sendAction("intro"));
 draftBtn.addEventListener("click", () => sendAction("draft"));
 globalStopBtn.addEventListener("click", () => sendAction("globalStop"));

@@ -10,6 +10,7 @@ const params = new URLSearchParams(location.search);
 const playerNames = ["ЮРКО", "РАЗБІК", "ВАЛЄРЧИК", "ДІДУСИК", "МАРКУСИК"];
 const playerIndex = Number.parseInt(params.get("p"), 10);
 const myName = params.get("name") || playerNames[playerIndex] || "";
+const hasPlayerIndex = Number.isInteger(playerIndex);
 
 const mobileGeneration = document.querySelector("#mobileGeneration");
 const mobileName = document.querySelector("#mobileName");
@@ -60,18 +61,21 @@ function makeBeep() {
 }
 
 async function sendAction(type, payload = {}) {
+  const identity = hasPlayerIndex ? { index: playerIndex } : { name: myName };
   await fetch("/api/action", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ type, name: myName, ...payload })
+    body: JSON.stringify({ type, ...identity, ...payload })
   });
 }
 
 function render() {
   if (!mobile.state) return;
 
-  mobile.player = mobile.state.players.find((player) => player.name === myName);
-  mobileName.textContent = myName || "ГРАВЕЦЬ";
+  mobile.player = hasPlayerIndex
+    ? mobile.state.players[playerIndex]
+    : mobile.state.players.find((player) => player.name === myName);
+  mobileName.textContent = mobile.player ? mobile.player.name : myName || "ГРАВЕЦЬ";
   mobileGeneration.textContent = `ПОКОЛІННЯ ${mobile.state.generation}`;
   mobileIntro.textContent = mobile.state.introCountdown
     ? formatSeconds(mobile.state.introCountdown.secondsLeft)

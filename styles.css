@@ -54,6 +54,17 @@ select {
   font-weight: 800;
 }
 
+.setup select {
+  width: 90px;
+  padding: 12px 10px;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 800;
+}
+
 .setup button,
 .player button,
 .big-control {
@@ -390,18 +401,25 @@ select {
 
 .mobile-controls {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
 
 .mobile-controls button {
-  min-height: 78px;
+  min-height: 58px;
   border: 0;
   border-radius: 8px;
   background: #201b2b;
   color: #fff;
-  font-size: 34px;
+  font-size: 26px;
   font-weight: 900;
+}
+
+.mobile-controls #mobileNextBtn {
+  grid-column: 1 / -1;
+  min-height: 98px;
+  background: #1261c9;
+  font-size: 44px;
 }
 
 .mobile-controls button:disabled {
