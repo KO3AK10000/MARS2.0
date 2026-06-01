@@ -8,7 +8,7 @@ const port = Number(process.env.PORT || 5173);
 const host = process.env.HOST || "0.0.0.0";
 const root = __dirname;
 
-const playerNames = ["ЮРКО", "РАЗБІК", "ВАЛЄРЧИК", "ДІДУСИК", "МАРКУСИК"];
+const playerNames = ["ЮРКО", "РАЗБІК", "ВАЛЄРЧИК", "ДІДУСИК", "МАРКУСИК", "ЄВГЕН"];
 
 const contentTypes = {
   ".html": "text/html; charset=utf-8",
@@ -25,7 +25,7 @@ const state = {
   introCountdown: null,
   draftCountdown: null,
   sound: null,
-  players: playerNames.map((name) => createPlayer(name, 60 * 60))
+  players: playerNames.slice(0, 5).map((name) => createPlayer(name, 60 * 60))
 };
 
 const clients = new Set();
@@ -253,6 +253,11 @@ function applyAction(action) {
     }
 
     case "next": {
+      if (typeof action.id === "string" || typeof action.name === "string") {
+        const requestingIndex = getIndexFromAction(action);
+        if (requestingIndex === -1 || requestingIndex !== state.activeIndex) return;
+      }
+
       stopAllPlayers();
       const nextIndex = findNextPlayableIndex(state.activeIndex);
       if (nextIndex === -1) {

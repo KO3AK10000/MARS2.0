@@ -3,11 +3,12 @@ const playerColors = {
   "РАЗБІК": "#ffd735",
   "ВАЛЄРЧИК": "#20a64a",
   "ДІДУСИК": "#dd2f2f",
-  "МАРКУСИК": "#050505"
+  "МАРКУСИК": "#050505",
+  "ЄВГЕН": "linear-gradient(135deg, #ffe15a 0%, #2fbf62 100%)"
 };
 
 const params = new URLSearchParams(location.search);
-const playerNames = ["ЮРКО", "РАЗБІК", "ВАЛЄРЧИК", "ДІДУСИК", "МАРКУСИК"];
+const playerNames = ["ЮРКО", "РАЗБІК", "ВАЛЄРЧИК", "ДІДУСИК", "МАРКУСИК", "ЄВГЕН"];
 const playerIndex = Number.parseInt(params.get("p"), 10);
 const myName = params.get("name") || playerNames[playerIndex] || "";
 const myPlayerId = params.get("id") || myName;
@@ -93,7 +94,7 @@ function render() {
 
   mobileReadyBtn.disabled = false;
   mobilePassBtn.disabled = mobile.player.passed;
-  mobileNextBtn.disabled = false;
+  mobileNextBtn.disabled = !mobile.player.running;
   mobileTimer.textContent = formatSeconds(mobile.player.seconds);
   mobileTimer.classList.toggle("timer-yurko", mobile.player.name === "ЮРКО");
   mobilePlayerCard.classList.toggle("is-active", mobile.player.running);

@@ -1,10 +1,11 @@
-const playerNames = ["ЮРКО", "РАЗБІК", "ВАЛЄРЧИК", "ДІДУСИК", "МАРКУСИК"];
+const playerNames = ["ЮРКО", "РАЗБІК", "ВАЛЄРЧИК", "ДІДУСИК", "МАРКУСИК", "ЄВГЕН"];
 const playerColors = {
   "ЮРКО": "#0c63ce",
   "РАЗБІК": "#ffd735",
   "ВАЛЄРЧИК": "#20a64a",
   "ДІДУСИК": "#dd2f2f",
-  "МАРКУСИК": "#050505"
+  "МАРКУСИК": "#050505",
+  "ЄВГЕН": "linear-gradient(135deg, #ffe15a 0%, #2fbf62 100%)"
 };
 
 const playersEl = document.querySelector("#players");
@@ -88,29 +89,31 @@ function buildPlayers() {
     timer.className = "timer";
 
     const runRow = document.createElement("div");
-    runRow.className = "button-row";
+    runRow.className = "button-row single";
     runRow.append(
-      makeButton("старт", "start", () => sendAction("startPlayer", { index })),
-      makeButton("стоп", "stop", () => sendAction("stopPlayer", { index }))
+      makeButton("старт", "start", () => sendAction("startPlayer", { index }))
     );
 
     const stateRow = document.createElement("div");
-    stateRow.className = "button-row three";
+    stateRow.className = "button-row";
     const readyBtn = makeButton("готов", "ready", () => sendAction("toggleReady", { index }));
+    const passBtn = makeButton("ПАС", "pass", () => sendAction("adminTogglePass", { index }));
     stateRow.append(
       readyBtn,
+      passBtn
+    );
+
+    const adjustRow = document.createElement("div");
+    adjustRow.className = "button-row";
+    adjustRow.append(
       makeButton("+ 1 хв", "adjust", () => sendAction("adjustPlayer", { index, amount: 60 })),
       makeButton("- 1 хв", "adjust", () => sendAction("adjustPlayer", { index, amount: -60 }))
     );
 
-    const passRow = document.createElement("div");
-    passRow.className = "button-row";
-    const passBtn = makeButton("ПАС", "pass", () => sendAction("adminTogglePass", { index }));
     const status = document.createElement("div");
     status.className = "status";
-    passRow.append(passBtn, status);
 
-    playerEl.append(select, timer, runRow, stateRow, passRow);
+    playerEl.append(select, timer, runRow, stateRow, adjustRow, status);
     playersEl.append(playerEl);
     admin.refs[index] = { playerEl, select, timer, readyBtn, passBtn, status };
   });
