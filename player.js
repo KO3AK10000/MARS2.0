@@ -93,7 +93,7 @@ function render() {
   }
 
   mobileReadyBtn.disabled = false;
-  mobilePassBtn.disabled = mobile.player.passed;
+  mobilePassBtn.disabled = mobile.player.passed || !mobile.player.running;
   mobileNextBtn.disabled = !mobile.player.running;
   mobileTimer.textContent = formatSeconds(mobile.player.seconds);
   mobileTimer.classList.toggle("timer-yurko", mobile.player.name === "ЮРКО");

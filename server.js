@@ -98,6 +98,18 @@ function findNextPlayableIndex(fromIndex) {
   return -1;
 }
 
+function activateNextPlayer() {
+  stopAllPlayers();
+  const nextIndex = findNextPlayableIndex(state.activeIndex);
+  if (nextIndex === -1) {
+    state.activeIndex = -1;
+  } else {
+    state.activeIndex = nextIndex;
+    state.players[nextIndex].running = true;
+    triggerSound("player-active", state.players[nextIndex].name);
+  }
+}
+
 function rotatePlayers() {
   const firstPlayer = state.players.shift();
   state.players.push(firstPlayer);
@@ -187,9 +199,11 @@ function applyAction(action) {
     case "playerPass": {
       const index = getIndexFromAction(action);
       if (index === -1) return;
+      if (index !== state.activeIndex || !state.players[index].running) return;
 
       state.players[index].passed = true;
       state.players[index].running = false;
+      activateNextPlayer();
       break;
     }
 
@@ -259,15 +273,7 @@ function applyAction(action) {
         if (requestingIndex === -1 || requestingIndex !== state.activeIndex) return;
       }
 
-      stopAllPlayers();
-      const nextIndex = findNextPlayableIndex(state.activeIndex);
-      if (nextIndex === -1) {
-        state.activeIndex = -1;
-      } else {
-        state.activeIndex = nextIndex;
-        state.players[nextIndex].running = true;
-        triggerSound("player-active", state.players[nextIndex].name);
-      }
+      activateNextPlayer();
       break;
     }
   }
