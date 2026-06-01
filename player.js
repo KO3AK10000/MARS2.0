@@ -122,6 +122,10 @@ function playServerSound() {
   if (sound.reason === "player-ten" && mobile.player && sound.playerName === mobile.player.name) {
     makeBeep();
   }
+
+  if (sound.reason === "player-active" && mobile.player && sound.playerName === mobile.player.name) {
+    makeBeep();
+  }
 }
 
 function connectEvents() {

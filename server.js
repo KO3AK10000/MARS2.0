@@ -160,6 +160,7 @@ function applyAction(action) {
         player.running = playerIndex === index;
       });
       state.activeIndex = index;
+      triggerSound("player-active", state.players[index].name);
       break;
     }
 
@@ -265,6 +266,7 @@ function applyAction(action) {
       } else {
         state.activeIndex = nextIndex;
         state.players[nextIndex].running = true;
+        triggerSound("player-active", state.players[nextIndex].name);
       }
       break;
     }

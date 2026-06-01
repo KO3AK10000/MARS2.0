@@ -36,27 +36,6 @@ function formatSeconds(totalSeconds) {
   return `${negative ? "-" : ""}${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 }
 
-function makeBeep() {
-  try {
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    const audio = new AudioContext();
-    const oscillator = audio.createOscillator();
-    const gain = audio.createGain();
-
-    oscillator.type = "sine";
-    oscillator.frequency.value = 880;
-    oscillator.connect(gain);
-    gain.connect(audio.destination);
-    gain.gain.setValueAtTime(0.001, audio.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.35, audio.currentTime + 0.02);
-    gain.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + 0.75);
-    oscillator.start();
-    oscillator.stop(audio.currentTime + 0.8);
-  } catch (error) {
-    console.warn("Не вдалося відтворити звук", error);
-  }
-}
-
 async function sendAction(type, payload = {}) {
   await fetch("/api/action", {
     method: "POST",
@@ -145,7 +124,6 @@ function render() {
   renderCountdownButtons();
   renderPlayers();
   renderPhoneLinks();
-  playServerSound();
 }
 
 function renderPlayers() {
@@ -230,13 +208,6 @@ function updateQrVisibility() {
   cards.forEach((card, index) => {
     card.classList.toggle("is-open", index === admin.visibleQrIndex);
   });
-}
-
-function playServerSound() {
-  const sound = admin.state.sound;
-  if (!sound || sound.id === admin.lastSoundId) return;
-  admin.lastSoundId = sound.id;
-  makeBeep();
 }
 
 function connectEvents() {
