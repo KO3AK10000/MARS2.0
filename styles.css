@@ -389,7 +389,7 @@ select {
 
 .mobile-timer {
   color: var(--purple);
-  font-size: clamp(64px, 24vw, 132px);
+  font-size: clamp(64px, 28vw, 132px);
   line-height: 0.95;
   font-weight: 900;
   font-variant-numeric: tabular-nums;
@@ -415,7 +415,7 @@ select {
 }
 
 .mobile-turn-actions button {
-  min-height: 58px;
+  height: 70px;
   border: 0;
   border-radius: 8px;
   background: #201b2b;
@@ -429,7 +429,7 @@ select {
 }
 
 .mobile-next-action button {
-  min-height: 98px;
+  min-height: 200px;
   border: 0;
   border-radius: 8px;
   background: #1261c9;
