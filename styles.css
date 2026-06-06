@@ -408,13 +408,13 @@ select {
   text-align: center;
 }
 
-.mobile-controls {
+.mobile-turn-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
 
-.mobile-controls button {
+.mobile-turn-actions button {
   min-height: 58px;
   border: 0;
   border-radius: 8px;
@@ -424,14 +424,22 @@ select {
   font-weight: 900;
 }
 
-.mobile-controls #mobileNextBtn {
-  grid-column: 1 / -1;
-  min-height: 98px;
-  background: #1261c9;
-  font-size: 44px;
+.mobile-next-action {
+  display: grid;
 }
 
-.mobile-controls button:disabled {
+.mobile-next-action button {
+  min-height: 98px;
+  border: 0;
+  border-radius: 8px;
+  background: #1261c9;
+  color: #fff;
+  font-size: 44px;
+  font-weight: 900;
+}
+
+.mobile-turn-actions button:disabled,
+.mobile-next-action button:disabled {
   opacity: 0.48;
 }
 
