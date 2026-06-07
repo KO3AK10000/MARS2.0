@@ -151,7 +151,7 @@ function renderCountdownButtons() {
     introBtn.textContent = formatSeconds(admin.state.introCountdown.secondsLeft);
     introBtn.classList.add("is-counting");
   } else {
-    introBtn.textContent = "ПОЧАТОК";
+    introBtn.textContent = "--:--";
     introBtn.classList.remove("is-counting");
   }
 
@@ -159,7 +159,7 @@ function renderCountdownButtons() {
     draftBtn.textContent = formatSeconds(admin.state.draftCountdown.secondsLeft);
     draftBtn.classList.add("is-counting");
   } else {
-    draftBtn.textContent = "ДРАФТ";
+    draftBtn.textContent = "--:--";
     draftBtn.classList.remove("is-counting");
   }
 }
