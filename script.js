@@ -151,7 +151,7 @@ function renderCountdownButtons() {
     introBtn.textContent = formatSeconds(admin.state.introCountdown.secondsLeft);
     introBtn.classList.add("is-counting");
   } else {
-    introBtn.textContent = "ПОЧАТОК";
+    introBtn.textContent = "START";
     introBtn.classList.remove("is-counting");
   }
 
