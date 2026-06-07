@@ -18,14 +18,14 @@ const contentTypes = {
 };
 
 const state = {
-  defaultSeconds: 60 * 60,
+  defaultSeconds: 35 * 60,
   playerCount: 5,
   activeIndex: -1,
   generation: 1,
   introCountdown: null,
   draftCountdown: null,
   sound: null,
-  players: playerNames.slice(0, 5).map((name) => createPlayer(name, 60 * 60))
+  players: playerNames.slice(0, 5).map((name) => createPlayer(name, 35 * 60))
 };
 
 const clients = new Set();
@@ -138,7 +138,7 @@ function applyAction(action) {
       const minutes = Number.parseInt(action.minutes, 10);
       if (!Number.isFinite(minutes) || minutes <= 0) return;
 
-      state.defaultSeconds = minutes * 60;
+      state.defaultSeconds = minutes * 35;
       state.activeIndex = -1;
       state.players.forEach((player) => {
         player.seconds = state.defaultSeconds;
