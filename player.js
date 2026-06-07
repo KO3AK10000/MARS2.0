@@ -78,10 +78,10 @@ function render() {
   mobileGeneration.textContent = `ПОКОЛІННЯ ${mobile.state.generation}`;
   mobileIntro.textContent = mobile.state.introCountdown
     ? formatSeconds(mobile.state.introCountdown.secondsLeft)
-    : "ПОЧАТОК";
+    : "--"--";
   mobileDraft.textContent = mobile.state.draftCountdown
     ? formatSeconds(mobile.state.draftCountdown.secondsLeft)
-    : "ДРАФТ";
+    : "--"--";
 
   if (!mobile.player) {
     mobileTimer.textContent = "--:--";
