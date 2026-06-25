@@ -93,9 +93,10 @@ function render() {
   }
 
   const isPrepPhaseActive = Boolean(mobile.state.introCountdown || mobile.state.draftCountdown);
-  mobileReadyBtn.disabled = !isPrepPhaseActive;
-  mobilePassBtn.disabled = mobile.player.passed || !mobile.player.running;
-  mobileNextBtn.disabled = !mobile.player.running;
+  const isReadyWindow = Boolean(mobile.player.readyWindow);
+  mobileReadyBtn.disabled = !isPrepPhaseActive && !isReadyWindow;
+  mobilePassBtn.disabled = mobile.player.passed || !mobile.player.running || isReadyWindow;
+  mobileNextBtn.disabled = !mobile.player.running || isReadyWindow;
   mobileTimer.textContent = formatSeconds(mobile.player.seconds);
   mobileTimer.classList.toggle("timer-yurko", mobile.player.name === "ЮРКО");
   mobilePlayerCard.classList.toggle("is-active", mobile.player.running);

@@ -56,7 +56,8 @@ function createPlayer(name, seconds) {
     running: false,
     ready: false,
     passed: false,
-    warnedBelowTen: false
+    warnedBelowTen: false,
+    readyWindow: false
   };
 }
 
@@ -73,6 +74,7 @@ function resetPlayersForCount(count) {
 function stopAllPlayers() {
   state.players.forEach((player) => {
     player.running = false;
+    player.readyWindow = false;
   });
 }
 
@@ -89,6 +91,7 @@ function startAvailablePlayers() {
   state.activeIndex = -1;
   state.players.forEach((player) => {
     player.running = !player.ready && !player.passed;
+    player.readyWindow = player.running;
   });
 }
 
@@ -110,6 +113,7 @@ function activateNextPlayer() {
   } else {
     state.activeIndex = nextIndex;
     state.players[nextIndex].running = true;
+    state.players[nextIndex].readyWindow = false;
     triggerSound("player-active", state.players[nextIndex].name);
   }
 }
@@ -174,6 +178,7 @@ function applyAction(action) {
 
       state.players.forEach((player, playerIndex) => {
         player.running = playerIndex === index;
+        player.readyWindow = false;
       });
       state.activeIndex = index;
       triggerSound("player-active", state.players[index].name);
@@ -184,6 +189,7 @@ function applyAction(action) {
       const index = getIndexFromAction(action);
       if (index !== -1) {
         state.players[index].running = false;
+        state.players[index].readyWindow = false;
       }
       break;
     }
@@ -191,12 +197,13 @@ function applyAction(action) {
     case "toggleReady": {
       const index = getIndexFromAction(action);
       if (index === -1) return;
-      if ((typeof action.id === "string" || typeof action.name === "string") && !isPrepPhaseActive()) return;
+      if ((typeof action.id === "string" || typeof action.name === "string") && !isPrepPhaseActive() && !state.players[index].readyWindow) return;
 
       const player = state.players[index];
       player.ready = !player.ready;
       if (player.ready) {
         player.running = false;
+        player.readyWindow = false;
       }
       break;
     }
@@ -205,9 +212,11 @@ function applyAction(action) {
       const index = getIndexFromAction(action);
       if (index === -1) return;
       if (index !== state.activeIndex || !state.players[index].running) return;
+      if (state.players[index].readyWindow) return;
 
       state.players[index].passed = true;
       state.players[index].running = false;
+      state.players[index].readyWindow = false;
       activateNextPlayer();
       break;
     }
@@ -263,9 +272,10 @@ function applyAction(action) {
         rotatePlayers();
         state.players.forEach((player) => {
           player.ready = false;
-          player.passed = false;
-          player.running = false;
-        });
+        player.passed = false;
+        player.running = false;
+        player.readyWindow = false;
+      });
         state.activeIndex = -1;
         state.draftCountdown = { secondsLeft: 3 * 60 };
       }
@@ -273,6 +283,8 @@ function applyAction(action) {
     }
 
     case "next": {
+      if (state.players.some((player) => player.readyWindow)) return;
+
       if (typeof action.id === "string" || typeof action.name === "string") {
         const requestingIndex = getIndexFromAction(action);
         if (requestingIndex === -1 || requestingIndex !== state.activeIndex) return;
