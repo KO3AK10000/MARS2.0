@@ -34,7 +34,7 @@ const mobile = {
 function formatSeconds(totalSeconds) {
   if (totalSeconds === null || totalSeconds === undefined) return "--:--";
   const negative = totalSeconds < 0;
-  const absolute = Math.abs(Math.trunc(totalSeconds));
+  const absolute = negative ? Math.ceil(Math.abs(totalSeconds)) : Math.trunc(totalSeconds);
   const minutes = Math.floor(absolute / 60);
   const seconds = absolute % 60;
   return `${negative ? "-" : ""}${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
@@ -92,7 +92,8 @@ function render() {
     return;
   }
 
-  mobileReadyBtn.disabled = false;
+  const isPrepPhaseActive = Boolean(mobile.state.introCountdown || mobile.state.draftCountdown);
+  mobileReadyBtn.disabled = !isPrepPhaseActive;
   mobilePassBtn.disabled = mobile.player.passed || !mobile.player.running;
   mobileNextBtn.disabled = !mobile.player.running;
   mobileTimer.textContent = formatSeconds(mobile.player.seconds);

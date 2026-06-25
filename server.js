@@ -81,6 +81,10 @@ function cancelCountdown(type) {
   if (type === "draft") state.draftCountdown = null;
 }
 
+function isPrepPhaseActive() {
+  return Boolean(state.introCountdown || state.draftCountdown);
+}
+
 function startAvailablePlayers() {
   state.activeIndex = -1;
   state.players.forEach((player) => {
@@ -138,7 +142,7 @@ function applyAction(action) {
       const minutes = Number.parseInt(action.minutes, 10);
       if (!Number.isFinite(minutes) || minutes <= 0) return;
 
-      state.defaultSeconds = minutes * 35;
+      state.defaultSeconds = minutes * 60;
       state.activeIndex = -1;
       state.players.forEach((player) => {
         player.seconds = state.defaultSeconds;
@@ -187,6 +191,7 @@ function applyAction(action) {
     case "toggleReady": {
       const index = getIndexFromAction(action);
       if (index === -1) return;
+      if ((typeof action.id === "string" || typeof action.name === "string") && !isPrepPhaseActive()) return;
 
       const player = state.players[index];
       player.ready = !player.ready;
@@ -381,6 +386,12 @@ const server = http.createServer(async (request, response) => {
     return;
   }
 
+  if (request.method === "GET" && url.pathname === "/health") {
+    response.writeHead(200, { "Content-Type": "text/plain; charset=utf-8" });
+    response.end("ok");
+    return;
+  }
+
   if (request.method === "GET" && url.pathname === "/api/network") {
     response.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
     response.end(JSON.stringify({ port, addresses: getLocalAddresses() }));
@@ -449,9 +460,23 @@ const server = http.createServer(async (request, response) => {
 
 setInterval(tick, 250);
 
+function startKeepAlive() {
+  const keepAliveUrl = process.env.KEEP_ALIVE_URL || process.env.RENDER_EXTERNAL_URL;
+  const disabled = process.env.KEEP_ALIVE === "false";
+  if (disabled || !keepAliveUrl) return;
+
+  const healthUrl = `${keepAliveUrl.replace(/\/$/, "")}/health`;
+  const intervalMs = Number.parseInt(process.env.KEEP_ALIVE_INTERVAL_MS || String(10 * 60 * 1000), 10);
+
+  setInterval(() => {
+    fetch(healthUrl).catch(() => {});
+  }, intervalMs).unref?.();
+}
+
 server.listen(port, host, () => {
   console.log(`Game timer host page: http://localhost:${port}`);
   getLocalAddresses().forEach((address) => {
     console.log(`Phones in the same Wi-Fi can open: http://${address}:${port}`);
   });
+  startKeepAlive();
 });

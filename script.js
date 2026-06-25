@@ -30,7 +30,7 @@ const admin = {
 
 function formatSeconds(totalSeconds) {
   const negative = totalSeconds < 0;
-  const absolute = Math.abs(Math.trunc(totalSeconds));
+  const absolute = negative ? Math.ceil(Math.abs(totalSeconds)) : Math.trunc(totalSeconds);
   const minutes = Math.floor(absolute / 60);
   const seconds = absolute % 60;
   return `${negative ? "-" : ""}${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
